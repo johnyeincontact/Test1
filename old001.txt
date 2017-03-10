@@ -1,0 +1,198 @@
+function ToggleValueBox(id) {
+    var currentElement = document.getElementById(id).parentNode.parentNode.querySelector('[id*="txtAgent"]');
+    var hdValue = document.getElementById(id).parentNode.parentNode.querySelector('[id*="hdnAgent"]');
+
+    if (document.getElementById(id).value == '0') {
+        currentElement.value = hdValue.value;
+        currentElement.disabled = false;
+        currentElement.className = "textbox";
+    }
+    else {
+        if (currentElement.id.search(/Chat/) > 1) {
+            currentElement.value = document.querySelector('input[id$="txtGroupChat"]').value;
+        }
+        else if (currentElement.id.search(/Email/) > 1) {
+            currentElement.value = document.querySelector('input[id$="txtGroupEmail"]').value;
+        }
+        currentElement.disabled = true;
+        currentElement.className = "textCenter";
+    }
+}
+
+function ToggleCheckBox(id) {
+    if (document.getElementById(id).value == '0') {
+        var agentCheckBox = document.getElementById(id).parentNode.parentNode.querySelector('[id*="chkAgentRequest"]');
+        var hiddenCheckBox = document.getElementById(id).parentNode.parentNode.querySelector('[id*="hdnAgentRequest"]');
+
+        agentCheckBox.checked = hiddenCheckBox.value == "True" ? true : false;
+        agentCheckBox.disabled = false;
+    }
+    else {
+        var groupCheckBox = document.querySelector('input[id$="chkGroupContact"]');
+        var agentCheckBox = document.getElementById(id).parentNode.parentNode.querySelector('[id*="chkAgentRequest"]');
+
+        agentCheckBox.checked = groupCheckBox.checked;
+        agentCheckBox.disabled = true;
+    }
+}
+
+function SaveCustomInput(id) {
+    var newElement = document.getElementById(id).parentNode.parentNode.querySelector('[id*="hdnAgent"]');
+    newElement.value = document.getElementById(id).value;
+}
+
+function SaveCheckBox(obj) {
+    var agentCheckBox = obj.parentNode.querySelector('[id*="chkAgentRequest"]');
+    var hiddenCheckBox = obj.parentNode.querySelector('[id*="hdnAgentRequest"]');
+
+    hiddenCheckBox.value = agentCheckBox.checked ? "True" : "False";
+}
+
+function UpdateAgentChats(id) {
+    var groupChat = document.getElementById(id).value;
+
+    if ((groupChat > 12) || (groupChat.trim() == "")) {
+        return;
+    }
+
+    var dropDownSelections = document.querySelectorAll('[id*="_ddlChat"]');
+    var displayValues = document.querySelectorAll('[id*="_txtAgentChat"]');
+
+    for (i = 0; i < dropDownSelections.length; i++) {
+        if (dropDownSelections[i].value == 1)
+            displayValues[i].value = groupChat;
+    }
+}
+
+function UpdateAgentEmails(id) {
+    var groupChat = document.getElementById(id).value;
+
+    if ((groupChat > 25) || (groupChat.trim() == ""))
+        return;
+
+    var dropDownSelections = document.querySelectorAll('[id*="_ddlEmail"]');
+    var displayValues = document.querySelectorAll('[id*="_txtAgentEmail"]');
+
+    for (i = 0; i < dropDownSelections.length; i++) {
+        if (dropDownSelections[i].value == 1)
+            displayValues[i].value = groupChat;
+    }
+}
+
+function UpdateRequest(id) {
+    var checkValue = document.getElementById(id);;
+
+    var dropDownSelections = document.querySelectorAll('[id*="_ddlRequestContact"]');
+    var displayValues = document.querySelectorAll('[id*="_chkAgentRequest"]');
+
+    for (i = 0; i < dropDownSelections.length; i++) {
+        if (dropDownSelections[i].value == 1)
+            displayValues[i].checked = checkValue.checked;;
+    }
+}
+
+function MchToggleValueBox(id, txtid, hdnid) {
+    var currentElement = document.getElementById(id).parentNode.parentNode.querySelector('[id*="' + txtid + '"]');
+    var hdValue = document.getElementById(id).parentNode.parentNode.querySelector('[id*="' + hdnid + '"]');
+    currentElement.className = "";
+    var hdnPostbackElement = document.querySelector('[id$="hdnPostback"]').value;
+
+    if (document.getElementById(id).value == '0') {
+        currentElement.value = hdValue.value;
+        currentElement.className = "textbox";
+        currentElement.disabled = false;
+        hdnPostbackElement = 'false';
+    }
+    else {
+        if (currentElement.id.search(/Chat/) > 1) {
+            var val = document.querySelector('input[id$="txtTeamChats"]').id;
+            currentElement.value = document.getElementById(val).value;
+            hdnPostbackElement = 'false';
+        }
+        else if (currentElement.id.search(/Email/) > 1) {
+            var val = document.querySelector('input[id$="txtTeamEmails"]').id;
+            currentElement.value = document.getElementById(val).value;
+            hdnPostbackElement = 'false';
+        }
+        else if (currentElement.id.search(/WorkItem/) > 1) {
+            var val = document.querySelector('input[id$="txtTeamWorkItems"]').id;
+            currentElement.value = document.getElementById(val).value;
+            hdnPostbackElement = 'false';
+        }
+        currentElement.disabled = true;
+        currentElement.className = "textCenter";
+    }
+}
+
+function MchToggleCheckBox(id, txtid, hdnid, teamChk) {
+    if (document.getElementById(id).value == '0') {
+        var agentCheckBox = document.getElementById(id).parentNode.parentNode.querySelector('[id*="' + txtid + '"]');
+        var hiddenCheckBox = document.getElementById(id).parentNode.parentNode.querySelector('[id*="' + hdnid + '"]');
+
+        if (hiddenCheckBox.value == "True") {
+            agentCheckBox.checked = true;
+        }
+        else {
+            agentCheckBox.checked = false;
+        }
+        agentCheckBox.className = "textbox";
+        agentCheckBox.disabled = false;
+    }
+    else {
+        var groupCheckBox = document.querySelector('input[id$="' + teamChk + '"]');
+        var agentCheckBox = document.getElementById(id).parentNode.parentNode.querySelector('[id*="' + txtid + '"]');
+        agentCheckBox.checked = groupCheckBox.checked;
+        agentCheckBox.className = "textCenter";
+        agentCheckBox.disabled = true;
+    }
+}
+
+function ValidIntegerEntry() {
+    return (!(event.keyCode >= 65) && event.keyCode != 32);
+}
+
+function UpdateAgentMCHChats(id) {
+    UpdateAgentMchTextValues(id, 12, "_ddlChats", "_txtChats");
+}
+
+function UpdateAgentMCHEmails(id) {
+    UpdateAgentMchTextValues(id, 25, "_ddlEmails", "_txtEmails");
+}
+
+function UpdateAgentMCHWorkItems(id) {
+    UpdateAgentMchTextValues(id, 25, "_ddlWorkItems", "_txtWorkItems");
+}
+
+function UpdateAgentMchTextValues(id, maxrange, ddlId, txtId) {
+    var teamValue = document.getElementById(id).value;
+    if ((teamValue > maxrange) || (teamValue.trim() == "") || !(/^\d+$/.test(teamValue))) {
+        return;
+    }
+    var dropDownSelections = document.querySelectorAll('[id*="' + ddlId + '"]');
+    var displayValues = document.querySelectorAll('[id*="' + txtId + '"]');
+
+    for (i = 0; i < dropDownSelections.length; i++) {
+        if (dropDownSelections[i].value == 1)
+            displayValues[i].value = teamValue;
+    }
+}
+
+function UpdateMchRequestContact(id) {
+    UpdateAgentMchCheckboxValues(id, "_ddlRequestContact", "_chkRequestContact")
+}
+
+function UpdateMchContactAutoFocus(id) {
+    UpdateAgentMchCheckboxValues(id, "_ddlContactAutoFocus", "_chkContactAutoFocus")
+}
+
+function UpdateAgentMchCheckboxValues(id, ddlId, txtId) {
+    var checkValue = document.getElementById(id);;
+
+    var dropDownSelections = document.querySelectorAll('[id*="' + ddlId + '"]');
+    var displayValues = document.querySelectorAll('[id*="' + txtId + '"]');
+
+    for (i = 0; i < dropDownSelections.length; i++) {
+        if (dropDownSelections[i].value == 1)
+            displayValues[i].checked = checkValue.checked;;
+    }
+}
